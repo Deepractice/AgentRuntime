@@ -1,0 +1,56 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag for the Docker image (e.g., 1.2.0)'
+        required: true
+        type: string
+      push_latest:
+        description: 'Also tag as latest'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  IMAGE_NAME: deepracticexs/agent-runtime
+  REGISTRY: docker.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
+            ${{ inputs.push_latest && format('{0}/{1}:latest', env.REGISTRY, env.IMAGE_NAME) || '' }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          labels: |
+            org.opencontainers.image.title=Agent Runtime
+            org.opencontainers.image.description=Base runtime environment for AI agents with Debian, Node.js, Chrome, FFmpeg and essential tools
+            org.opencontainers.image.version=${{ inputs.version }}
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Image digest
+        run: echo "Image pushed successfully with version ${{ inputs.version }}"
