@@ -8,7 +8,7 @@ FROM debian:12
 LABEL maintainer="Deepractice AI <hello@deepractice.ai>"
 LABEL org.opencontainers.image.title="Agent Runtime"
 LABEL org.opencontainers.image.description="Base runtime environment for AI agents with Debian, Node.js, Bun and essential tools"
-LABEL org.opencontainers.image.version="1.2.0"
+LABEL org.opencontainers.image.version="0.4.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
 

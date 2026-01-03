@@ -20,7 +20,7 @@ Base execution environment for AI agents.
 ./build.sh
 
 # Build specific version
-./build.sh 1.2.0
+./build.sh 0.4.0
 ```
 
 Or use GitHub Actions workflow (recommended):
@@ -33,7 +33,7 @@ Or use GitHub Actions workflow (recommended):
 ### As Base Image
 
 ```dockerfile
-FROM deepracticexs/agent-runtime:1.2.0
+FROM deepracticexs/agent-runtime:0.4.0
 
 # Your application code
 WORKDIR /app
@@ -57,7 +57,7 @@ docker run -it --rm --user node deepracticexs/agent-runtime:latest
 Or in Dockerfile:
 
 ```dockerfile
-FROM deepracticexs/agent-runtime:1.2.0
+FROM deepracticexs/agent-runtime:0.4.0
 USER node
 ```
 
@@ -79,5 +79,5 @@ Custom registry:
 
 ```bash
 export REGISTRY=your-registry.com
-./build.sh 1.2.0
+./build.sh 0.4.0
 ```
