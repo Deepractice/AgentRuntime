@@ -5,10 +5,10 @@ Base execution environment for AI agents.
 ## What's Inside
 
 - **OS**: Debian 12
-- **Node.js**: v20 LTS (with npm)
+- **Node.js**: v22 LTS (with npm)
+- **Bun**: Latest version
 - **Package Manager**: pnpm 10.15.1
-- **Browser**: Chromium with chromedriver
-- **Media**: FFmpeg
+- **PromptX**: @promptx/cli (promptx command)
 - **Build Tools**: gcc, g++, make, python3 (for native modules)
 - **Version Control**: git
 - **Utilities**: curl, wget, vim, nano, jq, tree, htop
@@ -20,7 +20,7 @@ Base execution environment for AI agents.
 ./build.sh
 
 # Build specific version
-./build.sh 1.0.1
+./build.sh 1.2.0
 ```
 
 Or use GitHub Actions workflow (recommended):
@@ -33,7 +33,7 @@ Or use GitHub Actions workflow (recommended):
 ### As Base Image
 
 ```dockerfile
-FROM deepracticexs/agent-runtime:1.0.0
+FROM deepracticexs/agent-runtime:1.2.0
 
 # Your application code
 WORKDIR /app
@@ -48,9 +48,22 @@ CMD ["node", "index.js"]
 docker run -it --rm deepracticexs/agent-runtime:latest
 ```
 
+### Run as Non-root User
+
+```bash
+docker run -it --rm --user node deepracticexs/agent-runtime:latest
+```
+
+Or in Dockerfile:
+
+```dockerfile
+FROM deepracticexs/agent-runtime:1.2.0
+USER node
+```
+
 ## Image Size
 
-Approximately ~1.2GB (compressed ~450MB)
+Approximately ~1.6GB (compressed ~500MB)
 
 ## Update Policy
 
@@ -66,5 +79,5 @@ Custom registry:
 
 ```bash
 export REGISTRY=your-registry.com
-./build.sh 1.0.0
+./build.sh 1.2.0
 ```
